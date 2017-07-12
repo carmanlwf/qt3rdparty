@@ -28,16 +28,16 @@ SOURCES += \
     myhelper.cpp \
     parklotupdate.cpp \
     mytcpserver.cpp \
-    baseclass.cpp \
-    myaction.cpp
+    myaction.cpp \
+    baseclass.cpp
 
 
 HEADERS += \
     parklotupdate.h \
     mytcpserver.h \
-    baseclass.h \
     myaction.h \
-    myhelper.h
+    myhelper.h \
+    baseclass.h
 
 CONFIG += C++11
 
@@ -54,3 +54,6 @@ INCLUDEPATH += $$PWD/3rdparty/qmqtt/include
 INCLUDEPATH += $$PWD/3rdparty/QtXlsx/include
 
 DEPENDPATH += $$PWD/.
+
+DISTFILES += \
+    log/2017-07-10log.txt

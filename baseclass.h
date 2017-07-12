@@ -3,9 +3,9 @@
 
 #include <QObject>
 
-#include<myhelper.h>
+//#include<myhelper.h>
 #include<myaction.h>
-
+//#include<QDataStream>
 
 
 class BaseClass
@@ -23,9 +23,8 @@ public:
   QString  getsign_type();
   QString  getsign();
 
-  static   BaseClass Convert(const QByteArray &res);
-  static   QByteArray Package(const QString &park_id,int len,const QString &action,
-                              int result,const QString &recdata,const QString &recsign);
+  // BaseClass Convert(const QByteArray &res);
+  //  QByteArray Package(const QString &park_id,int len,const QString &action,int result,const QString &recdata,const QString &recsign);
 
   void sethead(const QString &h);
   void setlen(const QString &h);
@@ -38,7 +37,7 @@ public:
 
   void splitjson(const QString &jsondata);
 
-protected:
+public:
     QString  head; //标识字节 长度20
     QString  len;  //长度     长度4
     QString  pack_type;//命令字 长度2
@@ -50,6 +49,8 @@ protected:
 
      QMap<QString,QString> m_parkidmap;
      QMap<QString,QString> m_commadmap;
+
+    //  BaseClass  entity ;
 
 
 };

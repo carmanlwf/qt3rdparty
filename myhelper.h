@@ -1,10 +1,11 @@
 ﻿#ifndef MYHELPER_H
 #define MYHELPER_H
 
+//xml
 #include <QObject>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
-#include<QDomDocument>
+#include <QDomDocument>
 #include <QJsonObject>
 #include <QCryptographicHash>
 #include <QTcpServer>
@@ -34,7 +35,12 @@
 #include <QTimer>
 #include<QHostAddress>
 #include<QTextStream>
+//
+#include<QMutex>
+#include<QDateTime>
 
+#include<baseclass.h>
+#include<QDataStream>
 
 
 //#pragma comment(lib, "Version")
@@ -160,6 +166,8 @@ public:
    static void SaveLog();
    QString LogPath,LogString,LogLevel;
 
+  static void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
 };
 
 class MyHelper
@@ -202,6 +210,9 @@ public:
   static   int Compress(char* pSrcFile, char* pDstFile);
   static   int Uncompress(char* pSrcFile, char* pDstFile);
 
+  static   BaseClass Convert(const QByteArray &res);
+
+ static QByteArray Package(const QString &park_id, int len, const QString &action, int result, const QString &recdata, const QString &recsign);
 };
 
 #endif // MYHELPER_H

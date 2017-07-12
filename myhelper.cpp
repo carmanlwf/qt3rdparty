@@ -274,6 +274,105 @@ int MyHelper::Uncompress(char *pSrcFile, char *pDstFile)
     return LzmaUncompress(pSrcFile,  pDstFile);
 }
 
+BaseClass MyHelper::Convert(const QByteArray &res)
+{
+    BaseClass  entity ;
+    entity.head=res.left(20);
+    entity.len=res.mid(21,4);
+    int datalen=res.size();
+
+    // 判断长度
+    if(datalen==entity.len.toInt() )
+    {
+        entity.pack_type=res.mid(25,2);
+        entity.timestamp=res.mid(27,19);
+        entity.version=res.mid(46,3);
+
+        entity.data=res.mid(49,datalen-49-266);
+        entity.sign_type=res.mid(datalen-266,10);
+        entity.sign=res.right(256);
+
+        // 判断加密
+        if (entity.sign==RSAHelper::RSAEncryptString("pubkey","seed",entity.data.toStdString().c_str()))
+        {
+            /*
+             switch (entity.pack_type)
+             {
+
+             case "Register":
+                 ActionRegiser a;
+                 a.recvjson(entity.data);
+                 break;
+             case "Heart_beat":
+                 ActionRegiser a;
+                 a.recvjson(entity.data);
+                 break;
+             case "In":
+                 ActionRegiser a;
+                 a.recvjson(entity.data);
+                 break;
+             case "Out":
+                 ActionRegiser a;
+                 a.recvjson(entity.data);
+                 break;
+             case "Pay":
+                 ActionRegiser a;
+                 a.recvjson(entity.data);
+                 break;
+             case "Recharge":
+                 ActionRegiser a;
+                 a.recvjson(entity.data);
+                 break;
+             case "OnlinePay":
+                 ActionRegiser a;
+                 a.recvjson(entity.data);
+                 break;
+             default:
+                 break;
+             }
+  */
+
+            return  entity;
+        }
+        else
+        {
+
+            qDebug()<<"加密比对错误";
+        }
+
+    }
+    else
+    {
+        qDebug()<<"数据包长度不正确";
+    }
+    return  entity;
+
+}
+QByteArray MyHelper::Package(const QString &park_id, int len, const QString &action, int result, const QString &recdata, const QString &recsign)
+{
+     QString d=QString("%1%2%3%4%5%6").arg(park_id).arg(len).arg(action).arg(result).arg(recdata).arg(recsign);
+
+
+     qDebug()<<"d:"<<d;
+
+     //用于暂存我们要发送的数据
+        QByteArray block;
+
+        //使用数据流写入数据
+        QDataStream out(&block,QIODevice::WriteOnly);
+
+        //设置数据流的版本，客户端和服务器端使用的版本要相同
+       // out.setVersion(QDataStream::Qt_4_6);
+
+        out<<QString("hello Tcp!!!");
+
+
+        //发送数据成功后，显示提示
+
+         return  block;//d.toLocal8Bit();
+
+}
+
 QString XMLHelper::GetNodeValue(const QString &nodename)
 {
 
@@ -602,25 +701,43 @@ MqttHelper::MqttHelper(QObject *parent):QObject(parent)
 
 void MqttHelper::Connect()
 {
-     //  _client->setClientId("client_id_1");
-     //  _client->setUsername("sagarfan");
-     //  _client->setPassword("password");
+
+      QHostAddress host("120.24.249.69");
+       quint16 port = 1883;
+
+       _client->setHost(host);
+       _client->setPort(port);
+      // _client->setClientId("client_id_1");
+       _client->setUsername("parkhero");
+       _client->setPassword("123456");
+      // _client->connectToHost();
+
+
+       _Subscriber->setHost(host);
+       _Subscriber->setPort(port);
+       _Subscriber->setUsername("parkhero");
+       _Subscriber->setPassword("123456");
+
        _client->connectToHost();
        _Subscriber->connectToHost();
 
-       qDebug()<<"_client connet"<<_client->isConnectedToHost();
-       qDebug()<<"_Subscriber connet"<< _Subscriber->isConnectedToHost();
-       //if (_client->isConnectedToHost()&&_Subscriber->isConnectedToHost())
            qDebug()<<"connet ";
 
 }
 
 void MqttHelper::Subscribe()
 {
-    _client->subscribe("qmqtt/exampletopic", 0);
-    _timer.start(1000);
-   _Subscriber->subscribe("qmqtt/exampletopic", 0);
-   qDebug()<<"Subscribe";
+    if (_client->isConnectedToHost())
+    {
+       _client->subscribe("qmqtt/exampletopic", 0);
+       _timer.start(1000);
+       qDebug()<<" c: Subscribe";
+    }
+    if (_Subscriber->isConnectedToHost())
+    {
+      _Subscriber->subscribe("qmqtt/exampletopic", 0);
+      qDebug()<<" s: Subscribe";
+    }
 
 }
 
@@ -690,4 +807,58 @@ void MqttHelper::onReceived(const QMQTT::Message &message)
 {
    qDebug() << "publish received: \"" << QString::fromUtf8(message.payload());
 
+}
+
+void LogInfo::myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    // 加锁
+    static QMutex mutex;
+    mutex.lock();
+
+    QByteArray localMsg = msg.toLocal8Bit();
+
+    QString strMsg("");
+    switch(type)
+    {
+    case QtDebugMsg:
+        strMsg = QString("Debug:");
+        break;
+    case QtWarningMsg:
+        strMsg = QString("Warning:");
+        break;
+    case QtCriticalMsg:
+        strMsg = QString("Critical:");
+        break;
+    case QtFatalMsg:
+        strMsg = QString("Fatal:");
+        break;
+    }
+
+    // 设置输出信息格式
+    QString strDateTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss ddd");
+    QString strMessage = QString("Message:%1 File:%2  Line:%3  Function:%4  DateTime:%5")
+            .arg(localMsg.constData()).arg(context.file).arg(context.line).arg(context.function).arg(strDateTime);
+
+
+    //文件夹与文件判断
+    QDir dir;
+    dir=QDir(dir.absolutePath()+"/log");
+    if(!dir.exists())
+    {
+
+        dir.mkdir(dir.absolutePath());//只创建一级子目录，即必须保证上级目录存在
+
+    }
+    QString mfilename;
+    mfilename= dir.absolutePath()+"/"+QDateTime::currentDateTime().toString("yyyy-MM-dd")+"log.txt";
+    // 输出信息至文件中（读写、追加形式）
+    QFile file(mfilename);
+    file.open(QIODevice::ReadWrite | QIODevice::Append);
+    QTextStream stream(&file);
+    stream << strMessage << "\r\n";
+    file.flush();
+    file.close();
+
+    // 解锁
+    mutex.unlock();
 }

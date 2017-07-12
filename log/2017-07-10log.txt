@@ -1,0 +1,3 @@
+Message:_client connet false File:myhelper.cpp  Line:611  Function:void MqttHelper::Connect()  DateTime:2017-07-10 11:19:01 周一
+Message:_Subscriber connet false File:myhelper.cpp  Line:612  Function:void MqttHelper::Connect()  DateTime:2017-07-10 11:19:01 周一
+Message:connet  File:myhelper.cpp  Line:614  Function:void MqttHelper::Connect()  DateTime:2017-07-10 11:19:01 周一
