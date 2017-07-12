@@ -212,7 +212,7 @@ public:
 
   static   BaseClass Convert(const QByteArray &res);
 
- static QByteArray Package(const QString &park_id, int len, const QString &action, int result, const QString &recdata, const QString &recsign);
+  static QByteArray Package(const QString &park_id, int len, const QString &action, int result, const QString &recdata, const QString &recsign);
 };
 
 #endif // MYHELPER_H

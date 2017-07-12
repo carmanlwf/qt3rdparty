@@ -17,8 +17,6 @@
 #include<QFileInfo>
 #include<QProcess>
 #include<QThread>
-
-
 #include <qmqtt.h>
 #include <QCoreApplication>
 #include <QTimer>
@@ -33,7 +31,6 @@ int main(int argc, char *argv[])
 
     //system("E:\\PersonalInformation\\my.bat");
    // system("E:\\PersonalInformation\\Uninstall.bat");
-
     //复制文件
     /*
         QString toDir , sourceDir;
@@ -64,7 +61,6 @@ int main(int argc, char *argv[])
          */
 
     //流程
-
     /*
     ParklotUpdate  pa;
 
@@ -118,7 +114,6 @@ int main(int argc, char *argv[])
 
     //7zip
    //qDebug()<<"compress"<< MyHelper::Compress("Update.xml","Update.7z");
-
     //rsa
     /*
       char priKey[128] = {0};
@@ -141,9 +136,6 @@ int main(int argc, char *argv[])
      */
     //MyTcpServer tcp(8080);
 
-    //mqtt
-
-     // MqttHelper  mqtt;
     //mqtt.Connect();
     //xlsx
     /*
@@ -152,11 +144,10 @@ int main(int argc, char *argv[])
             xlsx.saveAs("Test.xlsx");
             */
 
-
     // 安装消息处理程序
     //  qInstallMessageHandler(LogInfo::myMessageOutput);
 
-      MqttHelper  mqtt;
+     // MqttHelper  mqtt;
     //文件夹与文件判断
     /*
       QDir dir;
@@ -177,6 +168,10 @@ int main(int argc, char *argv[])
       qDebug()<<mfilename;
       */
 
-    return a.exec();
+
+    QByteArray ba("平凡之路");
+    QString s("平凡之路");
+
+         return a.exec();
 }
 

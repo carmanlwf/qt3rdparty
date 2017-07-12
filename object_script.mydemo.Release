@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\myhelper.o
+./release\parklotupdate.o
+./release\mytcpserver.o
+./release\baseclass.o
+./release\myaction.o
+./release\baseclass.o
+./release\moc_parklotupdate.o
+./release\moc_mytcpserver.o
+./release\moc_myhelper.o
+);
