@@ -3,10 +3,13 @@ INPUT(
 ./release\myhelper.o
 ./release\parklotupdate.o
 ./release\mytcpserver.o
-./release\baseclass.o
 ./release\myaction.o
 ./release\baseclass.o
+./release\myservice.o
+./release\qtservice.o
+./release\qtservice_win.o
 ./release\moc_parklotupdate.o
 ./release\moc_mytcpserver.o
 ./release\moc_myhelper.o
+./release\moc_myservice.o
 );

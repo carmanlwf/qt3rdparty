@@ -3,10 +3,13 @@ INPUT(
 ./debug\myhelper.o
 ./debug\parklotupdate.o
 ./debug\mytcpserver.o
-./debug\baseclass.o
 ./debug\myaction.o
 ./debug\baseclass.o
+./debug\myservice.o
+./debug\qtservice.o
+./debug\qtservice_win.o
 ./debug\moc_parklotupdate.o
 ./debug\moc_mytcpserver.o
 ./debug\moc_myhelper.o
+./debug\moc_myservice.o
 );

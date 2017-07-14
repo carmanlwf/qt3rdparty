@@ -10,12 +10,12 @@ QString BaseClass::gethead()
     return head;
 }
 
-QString BaseClass::getlen()
+unsigned int BaseClass::getlen()
 {
      return len;
 }
 
-QString BaseClass::getpack_type()
+unsigned short BaseClass::getpack_type()
 {
      return pack_type;
 }
@@ -50,12 +50,12 @@ void BaseClass::sethead(const QString &h)
     head=h;
 }
 
-void BaseClass::setlen(const QString &h)
+void BaseClass::setlen(const unsigned int &h)
 {
     head=h;
 }
 
-void BaseClass::setpack_type(const QString &h)
+void BaseClass::setpack_type(const unsigned short &h)
 {
     head=h;
 }

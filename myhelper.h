@@ -178,6 +178,7 @@ public:
   static QString  GetApplicationPath();
   static QString  GetIPAddress();
 
+  static bool comand(const QStringList &args);
 
 
   // 字节转KB、MB、GB
@@ -210,9 +211,11 @@ public:
   static   int Compress(char* pSrcFile, char* pDstFile);
   static   int Uncompress(char* pSrcFile, char* pDstFile);
 
-  static   BaseClass Convert(const QByteArray &res);
-
-  static QByteArray Package(const QString &park_id, int len, const QString &action, int result, const QString &recdata, const QString &recsign);
+  static   BaseClass  Convert(const QByteArray &res);
+  static   QByteArray BackPackage(const QString &park_id, unsigned int len, const QString &action, int result, const QString &recdata, const QString &recsign);
+  static   QByteArray DownPackage(const QString &park_id, unsigned int len, unsigned short pack_type, const QString &timestamp,
+                                  const QString &version, const QString &data, const QString &sign_type,const QString &sign);
+   static  QString  JsontoStr(const QJsonObject&json);
 };
 
 #endif // MYHELPER_H

@@ -5,6 +5,23 @@ MyHelper::MyHelper()
 
 }
 
+bool MyHelper::comand(const QStringList &args)
+{
+    QProcess p;
+    p.start("cmd.exe",args);
+    if (p.waitForStarted())
+    {
+        p.waitForFinished();
+        // qDebug() <<QString::fromLocal8Bit(p.readAllStandardOutput());
+        return true;
+    }
+    else
+    {
+        // qDebug() << "Failed to start Install";
+        return  false;
+    }
+}
+
 QString MyHelper::size(qint64 bytes)
 {
     QString strUnit;
@@ -278,13 +295,13 @@ BaseClass MyHelper::Convert(const QByteArray &res)
 {
     BaseClass  entity ;
     entity.head=res.left(20);
-    entity.len=res.mid(21,4);
+    entity.len=res.mid(21,4).toInt();
     int datalen=res.size();
 
     // 判断长度
-    if(datalen==entity.len.toInt() )
+    if(datalen==entity.len )
     {
-        entity.pack_type=res.mid(25,2);
+        entity.pack_type=res.mid(25,2).toShort();
         entity.timestamp=res.mid(27,19);
         entity.version=res.mid(46,3);
 
@@ -348,28 +365,62 @@ BaseClass MyHelper::Convert(const QByteArray &res)
     return  entity;
 
 }
-QByteArray MyHelper::Package(const QString &park_id, int len, const QString &action, int result, const QString &recdata, const QString &recsign)
+
+QByteArray MyHelper::BackPackage(const QString &park_id, unsigned int len, const QString &action, int result, const QString &recdata, const QString &recsign)
 {
-     QString d=QString("%1%2%3%4%5%6").arg(park_id).arg(len).arg(action).arg(result).arg(recdata).arg(recsign);
+    //用于暂存我们要发送的数据
+       QByteArray block;
+       block+=park_id.rightJustified(16);
+       qDebug()<<"len0"<<block.size();
+       block+= QByteArray::number(len).rightJustified(4);
+       qDebug()<<"len1"<<block.size();
+       block+=action.rightJustified(20);
+       qDebug()<<"len2"<<block.size();
+       block+=QByteArray::number(result);
+       qDebug()<<"len3"<<block.size();
+       block+=recdata;
+       qDebug()<<"len4"<<block.size();
+       block+=recsign;
+       qDebug()<<"len5"<<block.size();
 
+       //发送数据成功后，显示提示
+        return  block;//d.toLocal8Bit();
+}
 
-     qDebug()<<"d:"<<d;
+QByteArray MyHelper::DownPackage(const QString &park_id, unsigned int len, unsigned short pack_type, const QString &timestamp, const QString &version, const QString &data, const QString &sign_type, const QString &sign)
+{
+    //用于暂存我们要发送的数据
+       QByteArray block,ba;
 
-     //用于暂存我们要发送的数据
-        QByteArray block;
+       block+=park_id.rightJustified(16);
+       qDebug()<<"len0"<<block.size();
+       block+= QByteArray::number(len).rightJustified(4);
+       qDebug()<<"len1"<<block.size();
+       block+=ba.setNum(pack_type).rightJustified(2);
+       qDebug()<<"len2"<<block.size();
+       block+=timestamp.rightJustified(19);
+       qDebug()<<"len3"<<block.size();
+       block+=version.rightJustified(3);
+       qDebug()<<"len4"<<block.size();
+       block+=data;
+       qDebug()<<"len5"<<block.size();
+       block+=sign_type.rightJustified(10);
+       qDebug()<<"len6"<<block.size();
+       block+=sign.rightJustified(256);
+       qDebug()<<"len6"<<block.size();
 
-        //使用数据流写入数据
-        QDataStream out(&block,QIODevice::WriteOnly);
+       return  block;
+}
 
-        //设置数据流的版本，客户端和服务器端使用的版本要相同
-       // out.setVersion(QDataStream::Qt_4_6);
+QString MyHelper::JsontoStr(const QJsonObject &json)
+{
+    // 构建 Json 文档
+    QJsonDocument document;
+    document.setObject(json);
+    QByteArray byteArray = document.toJson(QJsonDocument::Compact);
+    QString strJson(byteArray);
 
-        out<<QString("hello Tcp!!!");
-
-
-        //发送数据成功后，显示提示
-
-         return  block;//d.toLocal8Bit();
+    return  strJson;
 
 }
 
@@ -647,13 +698,10 @@ QString RSAHelper::RSAEncryptString(const char *pubFilename, const char *seed, c
 
         RSAES_OAEP_SHA_Encryptor pub(pubFile);
 
+       // qDebug()<<"pub:"<<(QString)pub;
         RandomPool randPool;
-
         randPool.Put((byte *)seed, strlen(seed));
-
         string result;
-
-
         StringSource(message, true, new PK_EncryptorFilter(randPool, pub, new HexEncoder(new StringSink(result))));
 
         return  QString(result.c_str());
@@ -662,10 +710,10 @@ QString RSAHelper::RSAEncryptString(const char *pubFilename, const char *seed, c
 // RSA解密
 QString RSAHelper::RSADecryptString(const char *privFilename, const char *ciphertext)
 {
-       FileSource privFile(privFilename, true, new HexDecoder);
+         FileSource privFile(privFilename, true, new HexDecoder);
 
          RSAES_OAEP_SHA_Decryptor priv(privFile);
-
+        // qDebug()<<"pri:"<<(QString) priv;
          string result;
 
          StringSource(ciphertext, true, new HexDecoder(new PK_DecryptorFilter(GlobalRNG(), priv, new StringSink(result))));

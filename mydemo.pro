@@ -29,7 +29,8 @@ SOURCES += \
     parklotupdate.cpp \
     mytcpserver.cpp \
     myaction.cpp \
-    baseclass.cpp
+    baseclass.cpp \
+    myservice.cpp
 
 
 HEADERS += \
@@ -37,7 +38,8 @@ HEADERS += \
     mytcpserver.h \
     myaction.h \
     myhelper.h \
-    baseclass.h
+    baseclass.h \
+    myservice.h
 
 CONFIG += C++11
 
@@ -57,3 +59,4 @@ DEPENDPATH += $$PWD/.
 
 DISTFILES += \
     log/2017-07-10log.txt
+include(src/qtservice.pri)

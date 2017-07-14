@@ -222,6 +222,8 @@ Makefile: mydemo.pro D:/qt5.9/5.9/mingw53_32/mkspecs/win32-g++/qmake.conf D:/qt5
 		D:/qt5.9/5.9/mingw53_32/mkspecs/features/toolchain.prf \
 		D:/qt5.9/5.9/mingw53_32/mkspecs/features/default_pre.prf \
 		D:/qt5.9/5.9/mingw53_32/mkspecs/features/win32/default_pre.prf \
+		common.pri \
+		src/qtservice.pri \
 		D:/qt5.9/5.9/mingw53_32/mkspecs/features/resolve_config.prf \
 		D:/qt5.9/5.9/mingw53_32/mkspecs/features/exclusive_builds_post.prf \
 		D:/qt5.9/5.9/mingw53_32/mkspecs/features/default_post.prf \
@@ -409,6 +411,8 @@ D:/qt5.9/5.9/mingw53_32/mkspecs/features/exclusive_builds.prf:
 D:/qt5.9/5.9/mingw53_32/mkspecs/features/toolchain.prf:
 D:/qt5.9/5.9/mingw53_32/mkspecs/features/default_pre.prf:
 D:/qt5.9/5.9/mingw53_32/mkspecs/features/win32/default_pre.prf:
+common.pri:
+src/qtservice.pri:
 D:/qt5.9/5.9/mingw53_32/mkspecs/features/resolve_config.prf:
 D:/qt5.9/5.9/mingw53_32/mkspecs/features/exclusive_builds_post.prf:
 D:/qt5.9/5.9/mingw53_32/mkspecs/features/default_post.prf:
